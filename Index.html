@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forex Pip & Value Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f2f2f2; }
+    h2 { text-align: center; }
+    label, input, select { display: block; width: 100%; margin: 10px 0; }
+    button { padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; width: 100%; }
+    #result { margin-top: 20px; font-weight: bold; text-align: center; background: white; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Forex Pip & Value Calculator</h2><label for="oldPrice">Old Price:</label> <input type="number" id="oldPrice" step="any" placeholder="e.g., 1.1000">
+
+<label for="newPrice">New Price:</label> <input type="number" id="newPrice" step="any" placeholder="e.g., 1.1250">
+
+<label for="pairType">Currency Pair Type:</label> <select id="pairType"> <option value="normal">Standard (e.g., EUR/USD)</option> <option value="jpy">JPY Pair (e.g., USD/JPY)</option> </select>
+
+<label for="lotSize">Lot Size:</label> <select id="lotSize"> <option value="1.0">Standard Lot (1.0)</option> <option value="0.1">Mini Lot (0.1)</option> <option value="0.01">Micro Lot (0.01)</option> </select>
+
+<button onclick="calculatePips()">Calculate</button>
+
+  <div id="result"></div>  <script>
+    function calculatePips() {
+      const oldPrice = parseFloat(document.getElementById('oldPrice').value);
+      const newPrice = parseFloat(document.getElementById('newPrice').value);
+      const pairType = document.getElementById('pairType').value;
+      const lotSize = parseFloat(document.getElementById('lotSize').value);
+
+      if (isNaN(oldPrice) || isNaN(newPrice)) {
+        document.getElementById('result').innerText = 'Please enter valid prices.';
+        return;
+      }
+
+      const pipSize = pairType === 'jpy' ? 0.01 : 0.0001;
+      const pipValuePerStandardLot = pairType === 'jpy' ? 9.13 : 10.00; // Approximation
+
+      const pips = Math.abs(newPrice - oldPrice) / pipSize;
+      const pipValue = pipValuePerStandardLot * lotSize;
+      const totalValue = pips * pipValue;
+
+      document.getElementById('result').innerHTML =
+        `Pip Difference: <strong>${pips.toFixed(1)}</strong> pips<br>` +
+        `Pip Value: <strong>$${pipValue.toFixed(2)}</strong> per pip<br>` +
+        `Total Value: <strong>$${totalValue.toFixed(2)}</strong>`;
+    }
+  </script></body>
+</html>
